@@ -34,8 +34,10 @@ public static class ArraysTester {
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     private static double[] MultiplesOf(double number, int length)
     {
-        // Create an array of the length.
-        // Then use a for-loop and a counter variable to increment and set each multiple in the array.
+        // Create an array of length length.
+        // Create a double variable that will the store the value of the next multiple, initialized to the number parameter.
+        // Use a for-loop from 0 to length.
+        // In the for-loop, set the i-th element to the counter variable and increment it to the next multiple.
 
         double[] result = new double[length];
         double num = number;    // Value of next multiple.
@@ -58,9 +60,10 @@ public static class ArraysTester {
     /// </summary>
     private static void RotateListRight(List<int> data, int amount)
     {
-        // Create a new list with the same length.
+        // Create a copy of the list which will be used to retrieve the values.
         // Use a for-loop from 0-length.
-        // Calculate the new index using addition and modulo.
+        // In the loop, calculate the new index using addition and modulo.
+        // Set the value of data at the new index to the i-th element in the copy.
 
         List<int> copy = new List<int>(data);           // Copy list to get values from.
 
