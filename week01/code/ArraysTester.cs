@@ -34,12 +34,18 @@ public static class ArraysTester {
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     private static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Create an array of the length.
+        // Then use a for-loop and a counter variable to increment and set each multiple in the array.
 
-        return new double[0]; // replace this return statement with your own
+        double[] result = new double[length];
+        double num = number;    // Value of next multiple.
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = num;    // Assign the number in the array.
+            num += number;      // Increment it for the next number.
+        }
+
+        return result;
     }
     
     /// <summary>
@@ -52,10 +58,16 @@ public static class ArraysTester {
     /// </summary>
     private static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Create a new list with the same length.
+        // Use a for-loop from 0-length.
+        // Calculate the new index using addition and modulo.
 
+        List<int> copy = new List<int>(data);           // Copy list to get values from.
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            int newIndex = (i + amount) % data.Count;   // Calculate new index, using modulo to wrap around.
+            data[newIndex] = copy[i];                   // Set value from copy.
+        }
     }
 }
