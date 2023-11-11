@@ -38,8 +38,9 @@ public class PriorityQueue {
         }
 
         // Remove and return the item with the highest priority
-        var value = _queue[highPriorityIndex].Value;
-        return value;
+        var value = _queue[highPriorityIndex];
+        _queue.Remove(value);
+        return value.Value;
     }
 
     public override string ToString() {
