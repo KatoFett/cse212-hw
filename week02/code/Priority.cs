@@ -62,18 +62,19 @@ public static class Priority {
 
         // Test 4
         // Scenario: Dequeue the first of equal priorities.
-        // Expected Result: first, third, fourth
+        // Expected Result: first, third, fourth, fifth
         Console.WriteLine("Test 4");
         priorityQueue = new PriorityQueue();
         priorityQueue.Enqueue("first", 0);
         priorityQueue.Enqueue("second", 2);
         priorityQueue.Enqueue("third", 1);
         priorityQueue.Enqueue("fourth", 2);
+        priorityQueue.Enqueue("fifth", 2);
 
         priorityQueue.Dequeue();
         Console.WriteLine(priorityQueue);
 
-        // Defect(s) Found: 
+        // Defect(s) Found: Not getting the first of the highest priority, and skipping the last element.
 
         Console.WriteLine("---------");
 
