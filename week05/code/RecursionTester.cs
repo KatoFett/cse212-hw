@@ -1,8 +1,12 @@
-public static class RecursionTester {
+using System.Runtime.InteropServices;
+
+public static class RecursionTester
+{
     /// <summary>
     /// Entry point for the Prove 8 tests
     /// </summary>
-    public static void Run() {
+    public static void Run()
+    {
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 1 TESTS ===========");
         Console.WriteLine(SumSquaresRecursive(10)); // 385
@@ -67,7 +71,7 @@ public static class RecursionTester {
         Console.WriteLine(CountWaysToClimb(20)); // 121415
         // Uncomment out the test below after implementing memoization.  It won't work without it.
         // TODO Problem 3
-        // Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
+        Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
 
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
@@ -145,9 +149,10 @@ public static class RecursionTester {
     /// to identify a base case (terminating case).  If the value of
     /// n &lt;= 0, just return 0.   A loop should not be used.
     /// </summary>
-    public static int SumSquaresRecursive(int n) {
-        // TODO Start Problem 1
-        return 0;
+    public static int SumSquaresRecursive(int n)
+    {
+        if (n == 1) return 1;
+        else return ((int)Math.Pow(n, 2)) + SumSquaresRecursive(n - 1);
     }
 
     /// <summary>
@@ -169,8 +174,19 @@ public static class RecursionTester {
     /// You can assume that the size specified is always valid (between 1 
     /// and the length of the letters list).
     /// </summary>
-    public static void PermutationsChoose(string letters, int size, string word = "") {
-        // TODO Start Problem 2
+    public static void PermutationsChoose(string letters, int size, string word = "")
+    {
+        if (word.Length == size)
+        {
+            Console.WriteLine(word);
+        }
+        else
+        {
+            for (int i = 0; i < letters.Length; i++)
+            {
+                PermutationsChoose(letters.Remove(i, 1), size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -218,7 +234,8 @@ public static class RecursionTester {
     /// The last test case is commented out because it will not work
     /// until the memoization is implemented.
     /// </summary>
-    public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null) {
+    public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
+    {
         // Base Cases
         if (s == 0)
             return 0;
@@ -229,9 +246,15 @@ public static class RecursionTester {
         if (s == 3)
             return 4;
 
+        if (remember?.TryGetValue(s, out decimal value) == true)
+            return value;
+
+        remember ??= new Dictionary<int, decimal>();
+
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
-        return ways;
+        remember[s] = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+
+        return remember[s];
     }
 
     /// <summary>
@@ -247,25 +270,69 @@ public static class RecursionTester {
     /// Using recursion, display all possible binary strings for a given pattern.  You might find 
     /// some of the string functions like IndexOf and [..X] / [X..] to be useful in solving this problem.
     /// </summary>
-    public static void WildcardBinary(string pattern) {
-        // TODO Start Problem 4
+    public static void WildcardBinary(string pattern)
+    {
+        if (pattern.Contains('*'))
+        {
+            var idx = pattern.IndexOf('*');
+            var before = idx > 0 ? pattern[..idx] : string.Empty;
+            var after = idx < pattern.Length - 1 ? pattern[(idx + 1)..] : string.Empty;
+            WildcardBinary($"{before}0{after}");
+            WildcardBinary($"{before}1{after}");
+        }
+        else Console.WriteLine(pattern);
     }
 
     /// <summary>
     /// Use recursion to Print all paths that start at (0,0) and end at the
     /// 'end' square.
     /// </summary>
-    public static void SolveMaze(Maze maze, int x = 0, int y = 0, List<ValueTuple<int, int>>? currPath = null) {
+    public static void SolveMaze(Maze maze, int x = 0, int y = 0, List<ValueTuple<int, int>>? currPath = null)
+    {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null)
-            currPath = new List<ValueTuple<int, int>>();
+        currPath ??= new List<ValueTuple<int, int>>();
 
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
+        // Add this square to the current path.
+        currPath.Add((x, y));
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
+        if (maze.IsEnd(x, y))
+            Console.WriteLine(currPath.AsString());
+        else
+        {
 
-        // Console.WriteLine(currPath.AsString()); // Use this to print out your path when you find the solution
+            // Check left
+            var newSquare = (x: x - 1, y);
+            if (maze.IsValidMove(currPath, newSquare.x, newSquare.y))
+            {
+                SolveMaze(maze, newSquare.x, newSquare.y, currPath);
+            }
+
+            // Check right
+            newSquare = (x + 1, y);
+            if (maze.IsValidMove(currPath, newSquare.x, newSquare.y))
+            {
+                SolveMaze(maze, newSquare.x, newSquare.y, currPath);
+            }
+
+            // Check down
+            newSquare = (x, y - 1);
+            if (maze.IsValidMove(currPath, newSquare.x, newSquare.y))
+            {
+                SolveMaze(maze, newSquare.x, newSquare.y, currPath);
+            }
+
+            // Check up
+            newSquare = (x, y + 1);
+            if (maze.IsValidMove(currPath, newSquare.x, newSquare.y))
+            {
+                SolveMaze(maze, newSquare.x, newSquare.y, currPath);
+            }
+
+        }
+
+        // Since we've calculated all possibilites from this square,
+        // we want to remove it from the current path (backtrack).
+        currPath.Remove((x, y));
     }
 }
